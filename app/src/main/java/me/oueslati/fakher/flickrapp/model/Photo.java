@@ -25,6 +25,10 @@ public class Photo {
         this.title = title;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
     public String getThumbnailURL() {
         String thumbURL = getURL("q");
         Log.v(TAG, "Thumbnail URL: " + thumbURL);
