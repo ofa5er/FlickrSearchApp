@@ -38,8 +38,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
         int layoutIdForListItem = R.layout.image_list_item;
         LayoutInflater inflater = LayoutInflater.from(mContext);
         View view = inflater.inflate(layoutIdForListItem, parent, false);
-        ImageViewHolder viewHolder = new ImageViewHolder(view);
-        return viewHolder;
+        return new ImageViewHolder(view);
     }
 
     @Override

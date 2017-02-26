@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -23,10 +24,10 @@ import me.oueslati.fakher.flickrapp.util.FlickrJsonUtil;
 
 public class ImageSlider extends FragmentActivity {
 
-    public static Photo[] photos;
-    public static int currentImagePosition;
-    ImageFragmentPagerAdapter imageFragmentPagerAdapter;
-    ViewPager viewPager;
+    private static Photo[] photos;
+    private static int currentImagePosition;
+    private ImageFragmentPagerAdapter imageFragmentPagerAdapter;
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +45,6 @@ public class ImageSlider extends FragmentActivity {
         viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(imageFragmentPagerAdapter);
         viewPager.setCurrentItem(currentImagePosition);
-
     }
 
     public static class ImageFragmentPagerAdapter extends FragmentPagerAdapter {
@@ -77,15 +77,18 @@ public class ImageSlider extends FragmentActivity {
                                  Bundle savedInstanceState) {
             View swipeView = inflater.inflate(R.layout.swipe_fragment, container, false);
             ImageView imageView = (ImageView) swipeView.findViewById(R.id.imageView);
+            TextView mPhotoTitleTextView = (TextView) swipeView.findViewById(R.id.tv_photo_title);
             Bundle bundle = getArguments();
             int position = bundle.getInt("position");
-            String imageURL = photos[position].getPhotoURL();
+            String photoURL = photos[position].getPhotoURL();
+            String photoTitle = photos[position].getTitle();
             Glide.with(this)
-                    .load(imageURL)
+                    .load(photoURL)
                     .crossFade()
                     .fitCenter()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(imageView);
+            mPhotoTitleTextView.setText(photoTitle);
             return swipeView;
         }
     }
