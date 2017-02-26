@@ -35,7 +35,7 @@ public class Photo {
         return thumbURL;
     }
 
-    public String getImageURL() {
+    public String getPhotoURL() {
         String imageURL = getURL("h");
         Log.v(TAG, "Image URL: " + imageURL);
         return imageURL;

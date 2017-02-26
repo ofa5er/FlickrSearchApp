@@ -1,6 +1,7 @@
 package me.oueslati.fakher.flickrapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,9 +22,14 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
     private static final String TAG = ImageAdapter.class.getSimpleName();
     private Photo[] mImageListData;
     private Context mContext;
+    private String flickrJsonResults;
 
     public ImageAdapter(Context context) {
         mContext = context;
+    }
+
+    public void setFlickrJsonResults(String jsonStr) {
+        flickrJsonResults = jsonStr;
     }
 
     @Override
@@ -47,6 +53,15 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
                 .fitCenter()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.mImageViewItem);
+        holder.mImageViewItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(mContext, ImageSlider.class);
+                myIntent.putExtra("flickr_search_json_results", flickrJsonResults);
+                myIntent.putExtra("image_current_position", position);
+                mContext.startActivity(myIntent);
+            }
+        });
     }
 
     @Override

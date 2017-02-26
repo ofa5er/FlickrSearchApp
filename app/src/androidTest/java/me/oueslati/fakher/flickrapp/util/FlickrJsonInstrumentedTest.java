@@ -37,7 +37,7 @@ public class FlickrJsonInstrumentedTest {
         String expectedThumbnailURL =
                 "https://farm1.staticflickr.com/572/32126515200_a04e32e7fb_q.jpg";
         assertNotNull(photo);
-        assertEquals(photo[0].getImageURL(), expectedImageURL);
+        assertEquals(photo[0].getPhotoURL(), expectedImageURL);
         assertEquals(photo[4].getThumbnailURL(), expectedThumbnailURL);
     }
 }

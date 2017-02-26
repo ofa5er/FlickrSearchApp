@@ -114,6 +114,8 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     Photo[] images = FlickrJsonUtil.getPhotosFromJson(flickrSearchResults);
                     mAdapter.setImageListData(images);
+                    //TODO(fakher): Change to parcelable.
+                    mAdapter.setFlickrJsonResults(flickrSearchResults);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
