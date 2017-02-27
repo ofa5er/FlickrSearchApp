@@ -2,6 +2,7 @@ package me.oueslati.fakher.flickrapp.util;
 
 
 import android.net.Uri;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,7 +16,7 @@ import java.util.Scanner;
  */
 
 public class FlickrNetworkUtils {
-
+    private static final String TAG = FlickrNetworkUtils.class.getSimpleName();
     private static final String FLICKR_API_URL = "https://api.flickr.com/services/rest/";
 
     private static final String SEARCH_METHOD_PARAM = "method";
@@ -69,17 +70,18 @@ public class FlickrNetworkUtils {
      */
     public static String getResponseFromHttpUrl(URL url) throws IOException {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        Log.v(TAG, "getResponseFromHttpUrl - URL :" + url.toString());
         try {
             InputStream in = urlConnection.getInputStream();
             Scanner scanner = new Scanner(in);
             scanner.useDelimiter("\\A");
-
             boolean hasInput = scanner.hasNext();
             String response = null;
             if (hasInput) {
                 response = scanner.next();
             }
             scanner.close();
+            Log.v(TAG, "getResponseFromHttpUrl - Response :" + response);
             return response;
         } finally {
             urlConnection.disconnect();

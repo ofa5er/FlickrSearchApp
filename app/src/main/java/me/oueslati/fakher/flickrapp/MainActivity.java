@@ -1,11 +1,14 @@
 package me.oueslati.fakher.flickrapp;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -21,11 +24,12 @@ import me.oueslati.fakher.flickrapp.util.FlickrJsonUtil;
 import me.oueslati.fakher.flickrapp.util.FlickrNetworkUtils;
 import me.oueslati.fakher.flickrapp.widget.AutoCompleteSearchView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<String> {
 
     public static final int NUM_RESULT_IMAGES = 100;
     public static final int NUM_GRID_COLUMN = 3;
-
+    private static final int FLICKR_PHOTO_SEARCH_LOADER = 11;
+    private static final String FLICKR_PHOTO_SEARCH_URL = "search_url";
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private ImageAdapter mAdapter;
@@ -55,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerImagesList.setHasFixedSize(true);
         mAdapter = new ImageAdapter(this);
         mRecyclerImagesList.setAdapter(mAdapter);
+
+        getSupportLoaderManager().initLoader(FLICKR_PHOTO_SEARCH_LOADER, null, this);
     }
 
 
@@ -81,49 +87,85 @@ public class MainActivity extends AppCompatActivity {
 
     private void makeFlickrSearchQuery(String keyword) {
         URL flickrSearchURL = FlickrNetworkUtils.buildURLWithPhotoSearchQuery(keyword, NUM_RESULT_IMAGES);
-        new FlickSearchQueryTask().execute(flickrSearchURL);
-    }
+        Bundle queryBundle = new Bundle();
+        if (flickrSearchURL == null || flickrSearchURL.toString().equals("")) {
+            Log.e(TAG, "makeFlickrSearchQuery: Empty flickrSearchURL");
+            return;
+        }
+        queryBundle.putString(FLICKR_PHOTO_SEARCH_URL, flickrSearchURL.toString());
 
-    public class FlickSearchQueryTask extends AsyncTask<URL, Void, String> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            mLoadingIndicator.setVisibility(View.VISIBLE);
+        LoaderManager loaderManager = getSupportLoaderManager();
+        Loader<String> flickSearch = loaderManager.getLoader(FLICKR_PHOTO_SEARCH_LOADER);
+        if (flickSearch == null) {
+            loaderManager.initLoader(FLICKR_PHOTO_SEARCH_LOADER, queryBundle, this);
+        } else {
+            loaderManager.restartLoader(FLICKR_PHOTO_SEARCH_LOADER, queryBundle, this);
         }
 
-        @Override
-        protected String doInBackground(URL... urls) {
-            URL searchURL = urls[0];
-            String flickrSearchResults = null;
+    }
 
+    @Override
+    public Loader<String> onCreateLoader(int id, final Bundle args) {
+        return new AsyncTaskLoader<String>(this) {
+            String mResultCache = null;
+
+            @Override
+            protected void onStartLoading() {
+                if (args == null) {
+                    return;
+                }
+                mLoadingIndicator.setVisibility(View.VISIBLE);
+
+                if (mResultCache == null) {
+                    forceLoad();
+                } else {
+                    deliverResult(mResultCache);
+                }
+            }
+
+            @Override
+            public String loadInBackground() {
+                String searchURL = args.getString(FLICKR_PHOTO_SEARCH_URL);
+                if (searchURL == null || searchURL.equals("")) {
+                    return null;
+                }
+                try {
+                    URL url = new URL(searchURL);
+                    return FlickrNetworkUtils.getResponseFromHttpUrl(url);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+
+            @Override
+            public void deliverResult(String data) {
+                mResultCache = data;
+                super.deliverResult(mResultCache);
+            }
+        };
+    }
+
+    @Override
+    public void onLoadFinished(Loader<String> loader, String data) {
+        mLoadingIndicator.setVisibility(View.INVISIBLE);
+        if (data != null && !data.equals("")) {
+            mSearchResultsTextView.setText(data);
             try {
-                flickrSearchResults = FlickrNetworkUtils.getResponseFromHttpUrl(searchURL);
-            } catch (IOException e) {
+                Photo[] images = FlickrJsonUtil.getPhotosFromJson(data);
+                mAdapter.setImageListData(images);
+                //TODO(fakher): Change to parcelable.
+                mAdapter.setFlickrJsonResults(data);
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
-            return flickrSearchResults;
-        }
-
-        @Override
-        protected void onPostExecute(String flickrSearchResults) {
-            super.onPostExecute(flickrSearchResults);
-            mLoadingIndicator.setVisibility(View.INVISIBLE);
-            if (flickrSearchResults != null && !flickrSearchResults.equals("")) {
-                mSearchResultsTextView.setText(flickrSearchResults);
-                try {
-                    Photo[] images = FlickrJsonUtil.getPhotosFromJson(flickrSearchResults);
-                    mAdapter.setImageListData(images);
-                    //TODO(fakher): Change to parcelable.
-                    mAdapter.setFlickrJsonResults(flickrSearchResults);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                //TODO Error case
-            }
-
+        } else {
+            //TODO Error case
         }
     }
 
+    @Override
+    public void onLoaderReset(Loader<String> loader) {
+
+    }
 }
