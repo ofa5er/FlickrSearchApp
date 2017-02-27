@@ -24,7 +24,8 @@ import me.oueslati.fakher.flickrapp.util.FlickrJsonUtil;
 import me.oueslati.fakher.flickrapp.util.FlickrNetworkUtils;
 import me.oueslati.fakher.flickrapp.widget.AutoCompleteSearchView;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<String> {
+public class MainActivity extends AppCompatActivity
+        implements LoaderManager.LoaderCallbacks<String> {
 
     public static final int NUM_RESULT_IMAGES = 100;
     public static final int NUM_GRID_COLUMN = 3;

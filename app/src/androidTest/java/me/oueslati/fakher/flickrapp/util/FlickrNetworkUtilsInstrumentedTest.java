@@ -27,4 +27,38 @@ public class FlickrNetworkUtilsInstrumentedTest {
         URL receivedURL = FlickrNetworkUtils.buildURLWithPhotoSearchQuery("keyword", 100);
         assertEquals(receivedURL, expectedURL);
     }
+
+    public void buildURLWithPhotoGetInfoQuery_isCorrect() throws Exception {
+        URL expectedURL =
+                new URL("https://api.flickr.com/services/rest/?method=flickr.photos.getInfo&" +
+                        "api_key=c5edaf134bb9c5806b38e2cee648c29b&" +
+                        "photo_id=32139556723&secret=a0f385caae&format=json");
+
+        URL receivedURL = FlickrNetworkUtils.buildURLWithPhotoGetInfoQuery(
+                "32139556723", "a0f385caae");
+        assertEquals(receivedURL, expectedURL);
+    }
+
+    public void buildURLWithPeopleGetInfoQuery_isCorrect() throws Exception {
+        URL expectedURL =
+                new URL("https://api.flickr.com/services/rest/?method=flickr.people.getInfo&" +
+                        "api_key=c5edaf134bb9c5806b38e2cee648c29b&" +
+                        "user_id=36238874%40N02&format=json&nojsoncallback=1");
+
+        URL receivedURL = FlickrNetworkUtils.buildURLWithPeopleGetInfoQuery("36238874%40N02");
+        assertEquals(receivedURL, expectedURL);
+    }
+
+    public void buildURLWithPhotoGetLocationQuery_isCorrect() throws Exception {
+        URL expectedURL =
+                new URL("https://api.flickr.com/services/rest/?" +
+                        "method=flickr.photos.geo.getLocation&" +
+                        "api_key=c5edaf134bb9c5806b38e2cee648c29b&" +
+                        "photo_id=32322296952&format=json&nojsoncallback=1");
+
+        URL receivedURL = FlickrNetworkUtils.buildURLWithPhotoGetLocationQuery(
+                "32322296952");
+        assertEquals(receivedURL, expectedURL);
+    }
+
 }

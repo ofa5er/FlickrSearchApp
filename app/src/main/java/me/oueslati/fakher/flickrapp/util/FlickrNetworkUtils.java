@@ -26,9 +26,15 @@ public class FlickrNetworkUtils {
     private static final String RESULT_PAGE_PARAM = "page";
     private static final String FORMAT_PARAM = "format";
     private static final String NO_JSON_CALLBACK_PARAM = "nojsoncallback";
+    private static final String FLICKR_USER_ID_PARAM = "user_id";
+    private static final String FLCIKR_PHOTO_ID_PARAM = "photo_id";
+    private static final String FLICKR_SECRET_PARAM = "secret";
 
 
     private static final String searchMethod = "flickr.photos.search";
+    private static final String peopleGetInfoMethod = "flickr.people.getInfo";
+    private static final String photoGetInfoMethod = "flickr.photos.getInfo";
+    private static final String photoGeoGetLocationMethod = "flickr.photos.geo.getLocation";
     private static final String format = "json";
     private static final int resultPage = 1;
     private static final int nojsoncallback = 1;
@@ -60,6 +66,55 @@ public class FlickrNetworkUtils {
         }
     }
 
+    public static URL buildURLWithPeopleGetInfoQuery(String userID) {
+        Uri searchQueryUri = Uri.parse(FLICKR_API_URL).buildUpon()
+                .appendQueryParameter(SEARCH_METHOD_PARAM, peopleGetInfoMethod)
+                .appendQueryParameter(API_KEY_PARAM, apiKey)
+                .appendQueryParameter(FLICKR_USER_ID_PARAM, userID)
+                .appendQueryParameter(FORMAT_PARAM, format)
+                .appendQueryParameter(NO_JSON_CALLBACK_PARAM, String.valueOf(nojsoncallback))
+                .build();
+        try {
+            return new URL(searchQueryUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    public static URL buildURLWithPhotoGetInfoQuery(String photoID, String secret) {
+        Uri searchQueryUri = Uri.parse(FLICKR_API_URL).buildUpon()
+                .appendQueryParameter(SEARCH_METHOD_PARAM, photoGetInfoMethod)
+                .appendQueryParameter(API_KEY_PARAM, apiKey)
+                .appendQueryParameter(FLCIKR_PHOTO_ID_PARAM, photoID)
+                .appendQueryParameter(FLICKR_SECRET_PARAM, secret)
+                .appendQueryParameter(FORMAT_PARAM, format)
+                .appendQueryParameter(NO_JSON_CALLBACK_PARAM, String.valueOf(nojsoncallback))
+                .build();
+        try {
+            return new URL(searchQueryUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static URL buildURLWithPhotoGetLocationQuery(String photoID) {
+        Uri searchQueryUri = Uri.parse(FLICKR_API_URL).buildUpon()
+                .appendQueryParameter(SEARCH_METHOD_PARAM, photoGeoGetLocationMethod)
+                .appendQueryParameter(API_KEY_PARAM, apiKey)
+                .appendQueryParameter(FLCIKR_PHOTO_ID_PARAM, photoID)
+                .appendQueryParameter(FORMAT_PARAM, format)
+                .appendQueryParameter(NO_JSON_CALLBACK_PARAM, String.valueOf(nojsoncallback))
+                .build();
+        try {
+            return new URL(searchQueryUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     /**
      * Perform a HTTP request using an URL and return the response in a String format.

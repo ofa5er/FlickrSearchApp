@@ -9,20 +9,49 @@ import android.util.Log;
 
 public class Photo {
     private static final String TAG = Photo.class.getSimpleName();
-    private String owner;
     private String secret;
     private String id;
     private String farm;
     private String serverId;
     private String title;
+    private String country;
+    private int postedDate;
+    private Owner owner;
 
-    public Photo(String owner, String secret, String id, String farm, String serverId, String title) {
-        this.owner = owner;
+    public Photo() {
+    }
+
+    public Photo(String owner, String secret, String id, String farm,
+                 String serverId, String title) {
         this.secret = secret;
         this.id = id;
         this.farm = farm;
         this.serverId = serverId;
         this.title = title;
+    }
+
+    public Owner getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Owner owner) {
+        this.owner = owner;
+    }
+
+    public int getPostedDate() {
+        return postedDate;
+    }
+
+    public void setPostedDate(int postedDate) {
+        this.postedDate = postedDate;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getTitle() {
