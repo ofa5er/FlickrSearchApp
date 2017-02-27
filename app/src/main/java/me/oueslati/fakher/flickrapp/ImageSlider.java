@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -64,9 +64,14 @@ public class ImageSlider extends FragmentActivity {
         viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(imageFragmentPagerAdapter);
         viewPager.setCurrentItem(currentImagePosition);
+
+        //Loads 5 views in advance, it helps in providing a smooth navigation for a small increase
+        // memory usage.
+        viewPager.setOffscreenPageLimit(5);
+
     }
 
-    public static class ImageFragmentPagerAdapter extends FragmentPagerAdapter {
+    public static class ImageFragmentPagerAdapter extends FragmentStatePagerAdapter {
         public ImageFragmentPagerAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -118,15 +123,15 @@ public class ImageSlider extends FragmentActivity {
             queryBundle.putString(FLICKR_PHOTO_INFO_URL, photoInfoURL.toString());
 
 
-            LoaderManager loaderManager = getActivity().getSupportLoaderManager();
+            LoaderManager loaderManager = getLoaderManager();
             Loader<String> flickSearch = loaderManager.getLoader(FLICKR_PHOTO_LOCATION_LOADER);
             if (flickSearch == null) {
                 loaderManager.initLoader(FLICKR_PHOTO_LOCATION_LOADER, queryBundle, this);
             } else {
                 loaderManager.restartLoader(FLICKR_PHOTO_LOCATION_LOADER, queryBundle, this);
             }
-
         }
+
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -150,6 +155,7 @@ public class ImageSlider extends FragmentActivity {
                     .into(imageView);
             mPhotoTitleTextView.setText(photoTitle);
             requestPhotoInfo(photos[position]);
+            Log.v(TAG, "onCreateView(): " + position);
             return swipeView;
         }
 
@@ -161,6 +167,7 @@ public class ImageSlider extends FragmentActivity {
                 @Override
                 protected void onStartLoading() {
                     if (args == null) {
+                        Log.v(TAG, "args are null");
                         return;
                     }
                     Log.v(TAG, "onStartLoading()");
@@ -209,17 +216,17 @@ public class ImageSlider extends FragmentActivity {
 
         @Override
         public void onLoadFinished(Loader<String[]> loader, String[] data) {
-            if (data != null && !data.equals("")) {
+            if (data != null) {
                 try {
                     Photo photo = FlickrJsonUtil.getPhotoLocationFromJson(new Photo(), data[0]);
                     photo = FlickrJsonUtil.getPhotoInfoFromJson(photo, data[1]);
-                    Log.v(TAG, "Country:" + photo.getCountry());
                     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                     String date = sdf.format(new Date(photo.getPostedDate() * 1000));
                     mPostedDateTextView.setText(date);
-                    mLocationTextView.setText(photo.getCountry());
+                    mLocationTextView.setText(photo.getLocation());
                     mOwnerRealNameTextView.setText(photo.getOwner().getRealname());
-                    Glide.with(this)
+
+                    Glide.with(getActivity())
                             .load(photo.getOwner().getProfilePictureURL())
                             .asBitmap()
                             .centerCrop()
@@ -230,16 +237,17 @@ public class ImageSlider extends FragmentActivity {
                                             RoundedBitmapDrawableFactory.create(
                                                     getView().getResources(), resource);
                                     circularBitmapDrawable.setCircular(true);
-                                    mProfilePictureImageView.setImageDrawable(circularBitmapDrawable);
+                                    mProfilePictureImageView.
+                                            setImageDrawable(circularBitmapDrawable);
                                 }
                             });
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             } else {
-                //TODO Error case
+                //TODO(fakher) Show Error Message
             }
-        }
+                }
 
         @Override
         public void onLoaderReset(Loader<String[]> loader) {

@@ -22,6 +22,7 @@ public class FlickrJsonUtil {
 
     private static final String FLICKR_PHOTO_LOCATION = "location";
     private static final String FLICKR_PHOTO_COUNTRY = "country";
+    private static final String FLICKR_PHOTO_LOCALITY = "locality";
     private static final String FLICKR_PHOTO_CONTENT = "_content";
 
     private static final String FLICKR_PHOTO_OWNER_REALNAME = "realname";
@@ -89,9 +90,8 @@ public class FlickrJsonUtil {
     }
 
     public static Photo getPhotoLocationFromJson(Photo photo, String jsonStr) throws JSONException {
-        Log.v(TAG, "getPhotoLocationFromJson - LocationJsonStr:" + jsonStr);
         JSONObject jsonObject = new JSONObject(jsonStr);
-                /* Is there an error ?*/
+        /* Is there an error ?*/
         if (jsonObject.has(FLICKR_STAT)) {
             String status = jsonObject.getString(FLICKR_STAT);
             if (status.equals(FLICKR_STAT_FAIL)) {
@@ -114,13 +114,20 @@ public class FlickrJsonUtil {
                         .getJSONObject(FLICKR_PHOTO_LOCATION)
                         .getJSONObject(FLICKR_PHOTO_COUNTRY)
                         .getString(FLICKR_PHOTO_CONTENT);
+
+        String locality =
+                jsonObject.getJSONObject(FLICKR_IMAGE_LIST)
+                        .getJSONObject(FLICKR_PHOTO_LOCATION)
+                        .getJSONObject(FLICKR_PHOTO_LOCALITY)
+                        .getString(FLICKR_PHOTO_CONTENT);
+
         photo.setCountry(country);
+        photo.setLocality(locality);
         return photo;
     }
 
 
     public static Photo getPhotoInfoFromJson(Photo photo, String jsonStr) throws JSONException {
-        Log.v(TAG, "getPhotoInfoFromJson - PhotoJsonStr:" + jsonStr);
         JSONObject jsonObject = new JSONObject(jsonStr);
                 /* Is there an error ?*/
         if (jsonObject.has(FLICKR_STAT)) {

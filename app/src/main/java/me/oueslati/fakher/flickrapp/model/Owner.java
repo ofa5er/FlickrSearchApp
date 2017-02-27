@@ -18,6 +18,10 @@ public class Owner {
     }
 
     public String getRealname() {
+
+        if (realname == null || realname.equals("")) {
+            return "Unknown name";
+        }
         return realname;
     }
 

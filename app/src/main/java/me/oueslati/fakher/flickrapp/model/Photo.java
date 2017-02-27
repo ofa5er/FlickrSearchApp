@@ -9,14 +9,15 @@ import android.util.Log;
 
 public class Photo {
     private static final String TAG = Photo.class.getSimpleName();
-    private String secret;
-    private String id;
-    private String farm;
-    private String serverId;
-    private String title;
-    private String country;
-    private long postedDate;
-    private Owner owner;
+    private String secret = "";
+    private String id = "";
+    private String farm = "";
+    private String serverId = "";
+    private String title = "";
+    private String country = "";
+    private String locality = "";
+    private long postedDate = 0;
+    private Owner owner = null;
 
     public Photo() {
     }
@@ -28,6 +29,24 @@ public class Photo {
         this.farm = farm;
         this.serverId = serverId;
         this.title = title;
+    }
+
+    public String getLocation() {
+        String location;
+        if (country.equals("")) {
+            location = "Unknown location";
+        } else {
+            location = country + ", " + locality;
+        }
+        return location;
+    }
+
+    public String getLocality() {
+        return locality;
+    }
+
+    public void setLocality(String locality) {
+        this.locality = locality;
     }
 
     public String getSecret() {

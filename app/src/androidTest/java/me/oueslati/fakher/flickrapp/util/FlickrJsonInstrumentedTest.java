@@ -68,8 +68,10 @@ public class FlickrJsonInstrumentedTest {
         Photo photo = new Photo();
         Photo result = FlickrJsonUtil.getPhotoLocationFromJson(photo, locationJsonData);
         String expectedLocation = "Russia";
+        String expectedLocality = "Marusino";
         assertNotNull(result);
         assertEquals(result.getCountry(), expectedLocation);
+        assertEquals(result.getLocality(), expectedLocality);
     }
 
     @Test

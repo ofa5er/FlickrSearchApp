@@ -39,7 +39,7 @@ public class FlickrNetworkUtils {
     private static final int resultPage = 1;
     private static final int nojsoncallback = 1;
     private static final String apiKey = "b3380a67070b4cb848414a17c9b58433";
-
+    
 
     /**
      * Build an URL to search for photos using flickr api (flickr.photos.search).

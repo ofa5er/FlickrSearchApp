@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 
@@ -35,8 +36,7 @@ public class MainActivity extends AppCompatActivity
     private static final String TAG = MainActivity.class.getSimpleName();
     private ImageAdapter mAdapter;
     private RecyclerView mRecyclerImagesList;
-    private TextView mSearchResultsTextView;
-    private TextView mErrorMessageDisplay;
+    private TextView mSearchHintTextView;
     private ProgressBar mLoadingIndicator;
     private AutoCompleteSearchView mSearchView;
     @Override
@@ -47,8 +47,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void initialize() {
-        mSearchResultsTextView = (TextView) findViewById(R.id.tv_flickr_search_results_json);
-        mErrorMessageDisplay = (TextView) findViewById(R.id.tv_error_message_display);
+        mSearchHintTextView = (TextView) findViewById(R.id.tv_flickr_search_hint);
         mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
         mRecyclerImagesList = (RecyclerView) findViewById(R.id.rv_images);
 
@@ -64,6 +63,11 @@ public class MainActivity extends AppCompatActivity
         getSupportLoaderManager().initLoader(FLICKR_PHOTO_SEARCH_LOADER, null, this);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mLoadingIndicator.setVisibility(View.INVISIBLE);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -147,11 +151,16 @@ public class MainActivity extends AppCompatActivity
         };
     }
 
+    private void showErrorMessage() {
+        Toast.makeText(this, "Error, please try again...", Toast.LENGTH_LONG).show();
+    }
+
     @Override
     public void onLoadFinished(Loader<String> loader, String data) {
         mLoadingIndicator.setVisibility(View.INVISIBLE);
+        mRecyclerImagesList.setVisibility(View.VISIBLE);
+        mSearchHintTextView.setVisibility(View.INVISIBLE);
         if (data != null && !data.equals("")) {
-            mSearchResultsTextView.setText(data);
             try {
                 Photo[] images = FlickrJsonUtil.getPhotosFromJson(data);
                 mAdapter.setImageListData(images);
@@ -161,7 +170,7 @@ public class MainActivity extends AppCompatActivity
                 e.printStackTrace();
             }
         } else {
-            //TODO Error case
+            showErrorMessage();
         }
     }
 
