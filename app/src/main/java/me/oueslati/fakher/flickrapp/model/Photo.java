@@ -34,7 +34,7 @@ public class Photo {
     public String getLocation() {
         String location;
         if (country.equals("")) {
-            location = "Unknown location";
+            location = "Unknown Location";
         } else {
             location = country + ", " + locality;
         }

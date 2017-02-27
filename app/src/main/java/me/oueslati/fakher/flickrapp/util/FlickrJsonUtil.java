@@ -106,7 +106,7 @@ public class FlickrJsonUtil {
             if (status.equals(FLICKR_STAT_FAIL)) {
                 if (jsonObject.has(FLICKR_ERROR_MESSAGE)) {
                     if (jsonObject.getInt(FLICKR_ERROR_CODE) == 2) {
-                        photo.setCountry("Unknown Location");
+                        photo.setCountry("");
                         return photo;
                     }
                     String errorMessage = jsonObject.getString(FLICKR_ERROR_MESSAGE);
