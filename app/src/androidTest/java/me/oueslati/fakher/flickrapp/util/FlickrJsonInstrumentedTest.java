@@ -76,7 +76,7 @@ public class FlickrJsonInstrumentedTest {
     public void getPhotoInfoFromJson_isCorrect() throws Exception {
         Photo photo = new Photo();
         Photo result = FlickrJsonUtil.getPhotoInfoFromJson(photo, photoInfoJsonData);
-        int expectedDate = 1487348602;
+        long expectedDate = 1487348602;
         String expectedRealname = "Lou Feltz";
         String expectedrofilePictureURL = "http://farm8.staticflickr.com/" +
                 "7446/buddyicons/42415395@N07.jpg";

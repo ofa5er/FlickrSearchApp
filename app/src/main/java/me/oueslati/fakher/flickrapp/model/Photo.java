@@ -15,7 +15,7 @@ public class Photo {
     private String serverId;
     private String title;
     private String country;
-    private int postedDate;
+    private long postedDate;
     private Owner owner;
 
     public Photo() {
@@ -30,6 +30,14 @@ public class Photo {
         this.title = title;
     }
 
+    public String getSecret() {
+        return secret;
+    }
+
+    public String getId() {
+        return id;
+    }
+
     public Owner getOwner() {
         return owner;
     }
@@ -38,11 +46,11 @@ public class Photo {
         this.owner = owner;
     }
 
-    public int getPostedDate() {
+    public long getPostedDate() {
         return postedDate;
     }
 
-    public void setPostedDate(int postedDate) {
+    public void setPostedDate(long postedDate) {
         this.postedDate = postedDate;
     }
 

@@ -96,7 +96,7 @@ public class FlickrJsonUtil {
             String status = jsonObject.getString(FLICKR_STAT);
             if (status.equals(FLICKR_STAT_FAIL)) {
                 if (jsonObject.has(FLICKR_ERROR_MESSAGE)) {
-                    if (jsonObject.getInt(FLICKR_ERROR_MESSAGE) == 2) {
+                    if (jsonObject.getInt(FLICKR_ERROR_CODE) == 2) {
                         photo.setCountry("Unknown Location");
                         return photo;
                     }
@@ -136,10 +136,10 @@ public class FlickrJsonUtil {
             }
         }
 
-        int postedDate =
+        Long postedDate =
                 jsonObject.getJSONObject(FLICKR_IMAGE_LIST)
                         .getJSONObject(FLICKR_PHOTO_DATES)
-                        .getInt(FLICKR_PHOTO_DATES_POSTED);
+                        .getLong(FLICKR_PHOTO_DATES_POSTED);
         photo.setPostedDate(postedDate);
 
         JSONObject ownerJsonObject = jsonObject.getJSONObject(FLICKR_IMAGE_LIST)

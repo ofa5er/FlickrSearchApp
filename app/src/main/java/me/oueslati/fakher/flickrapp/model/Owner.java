@@ -5,10 +5,10 @@ package me.oueslati.fakher.flickrapp.model;
  */
 
 public class Owner {
-    String realname;
-    String nsid;
-    String iconserver;
-    int iconfarm;
+    private String realname;
+    private String nsid;
+    private String iconserver;
+    private int iconfarm;
 
     public Owner(String realname, String nsid, String iconserver, int iconfarm) {
         this.realname = realname;
