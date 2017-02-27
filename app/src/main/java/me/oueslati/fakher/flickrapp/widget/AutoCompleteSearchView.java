@@ -32,7 +32,7 @@ public class AutoCompleteSearchView extends SearchView {
         initialize();
     }
 
-    public void initialize() {
+    private void initialize() {
         mSearchAutoComplete = (SearchAutoComplete) findViewById(
                 android.support.v7.appcompat.R.id.search_src_text);
 
@@ -92,11 +92,5 @@ public class AutoCompleteSearchView extends SearchView {
             mSearchAutoComplete.setAdapter(adapter);
         }
     }
-
-
-    public void setAdapter(ArrayAdapter<?> adapter) {
-        mSearchAutoComplete.setAdapter(adapter);
-    }
-
 
 }

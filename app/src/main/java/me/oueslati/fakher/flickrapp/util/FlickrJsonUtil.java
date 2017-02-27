@@ -89,6 +89,15 @@ public class FlickrJsonUtil {
         return result;
     }
 
+    /**
+     * Extracts the country and the location of the photo form the JSON reply of the method
+     * flickr.photos.geo.getLocation.
+     *
+     * @param photo   photo object.
+     * @param jsonStr Reply of the method flickr.geo.get.location in JSON format.
+     * @return a photo object with initialized country and locality or null if there is any error.
+     * @throws JSONException Exception during the parsing of jsonStr.
+     */
     public static Photo getPhotoLocationFromJson(Photo photo, String jsonStr) throws JSONException {
         JSONObject jsonObject = new JSONObject(jsonStr);
         /* Is there an error ?*/
@@ -126,7 +135,15 @@ public class FlickrJsonUtil {
         return photo;
     }
 
-
+    /**
+     * Extracts the photo posting date and info about the uploader of the photo form the JSON
+     * reply of the method flickr.photos.getInfo.
+     * @param photo a photo object to add info to it.
+     * @param jsonStr eply of the method flickr.photos.getInfo in JSON format.
+     * @return a photo object with initialized posting date and owner info
+     * or null if there is any error.
+     * @throws JSONException Exception during the parsing of jsonStr.
+     */
     public static Photo getPhotoInfoFromJson(Photo photo, String jsonStr) throws JSONException {
         JSONObject jsonObject = new JSONObject(jsonStr);
                 /* Is there an error ?*/

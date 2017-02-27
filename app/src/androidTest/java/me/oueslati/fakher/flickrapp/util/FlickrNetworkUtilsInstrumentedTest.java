@@ -39,16 +39,6 @@ public class FlickrNetworkUtilsInstrumentedTest {
         assertEquals(receivedURL, expectedURL);
     }
 
-    public void buildURLWithPeopleGetInfoQuery_isCorrect() throws Exception {
-        URL expectedURL =
-                new URL("https://api.flickr.com/services/rest/?method=flickr.people.getInfo&" +
-                        "api_key=c5edaf134bb9c5806b38e2cee648c29b&" +
-                        "user_id=36238874%40N02&format=json&nojsoncallback=1");
-
-        URL receivedURL = FlickrNetworkUtils.buildURLWithPeopleGetInfoQuery("36238874%40N02");
-        assertEquals(receivedURL, expectedURL);
-    }
-
     public void buildURLWithPhotoGetLocationQuery_isCorrect() throws Exception {
         URL expectedURL =
                 new URL("https://api.flickr.com/services/rest/?" +

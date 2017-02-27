@@ -28,8 +28,8 @@ import me.oueslati.fakher.flickrapp.widget.AutoCompleteSearchView;
 public class MainActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<String> {
 
-    public static final int NUM_RESULT_IMAGES = 100;
-    public static final int NUM_GRID_COLUMN = 3;
+    private static final int NUM_RESULT_IMAGES = 100;
+    private static final int NUM_GRID_COLUMN = 3;
     private static final int FLICKR_PHOTO_SEARCH_LOADER = 11;
     private static final String FLICKR_PHOTO_SEARCH_URL = "search_url";
 

@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -245,10 +246,13 @@ public class ImageSlider extends FragmentActivity {
                     e.printStackTrace();
                 }
             } else {
-                //TODO(fakher) Show Error Message
+                showErrorMessage();
             }
-                }
+        }
 
+        private void showErrorMessage() {
+            Toast.makeText(getContext(), "Error, please try again...", Toast.LENGTH_LONG).show();
+        }
         @Override
         public void onLoaderReset(Loader<String[]> loader) {
 
