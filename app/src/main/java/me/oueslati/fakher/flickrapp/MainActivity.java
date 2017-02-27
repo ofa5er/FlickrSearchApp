@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity
                     return;
                 }
                 mLoadingIndicator.setVisibility(View.VISIBLE);
-
+                mSearchHintTextView.setVisibility(View.INVISIBLE);
                 if (mResultCache == null) {
                     forceLoad();
                 } else {
