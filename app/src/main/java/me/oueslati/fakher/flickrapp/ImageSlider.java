@@ -260,6 +260,4 @@ public class ImageSlider extends FragmentActivity {
 
     }
 
-
-
 }

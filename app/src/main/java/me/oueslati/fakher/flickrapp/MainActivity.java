@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity
         GridLayoutManager layoutManager = new GridLayoutManager(this, NUM_GRID_COLUMN);
         mRecyclerImagesList.setLayoutManager(layoutManager);
         mRecyclerImagesList.setHasFixedSize(true);
-        mAdapter = new ImageAdapter(this);
+        mAdapter = new ImageAdapter();
         mRecyclerImagesList.setAdapter(mAdapter);
 
         getSupportLoaderManager().initLoader(FLICKR_PHOTO_SEARCH_LOADER, null, this);

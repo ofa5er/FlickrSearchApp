@@ -24,10 +24,6 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
     private Context mContext;
     private String flickrJsonResults;
 
-    public ImageAdapter(Context context) {
-        mContext = context;
-    }
-
     public void setFlickrJsonResults(String jsonStr) {
         flickrJsonResults = jsonStr;
     }
@@ -55,6 +51,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
         holder.mImageViewItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //TODOV change flickrJsonResults to parcelable
                 Intent myIntent = new Intent(mContext, ImageSlider.class);
                 myIntent.putExtra("flickr_search_json_results", flickrJsonResults);
                 myIntent.putExtra("image_current_position", position);
